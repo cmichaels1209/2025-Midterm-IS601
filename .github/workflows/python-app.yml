@@ -1,0 +1,44 @@
+name: Python application
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone Repository Manually
+      run: git clone https://github.com/cmichaels1209/homework6.git .
+
+    - name: Install Python and Dependencies Manually
+      run: |
+        sudo apt update
+        sudo apt install -y python3 python3-venv python3-pip
+        python3 --version
+
+    - name: Set Up Virtual Environment
+      run: |
+        python3 -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pandas
+
+    - name: Verify Installed Packages
+      run: |
+        source venv/bin/activate
+        python --version
+        pip list
+
+    - name: Run Tests
+      run: |
+        source venv/bin/activate
+        pytest --cov
+      continue-on-error: false  # Ensures the job fails properly if tests fail
