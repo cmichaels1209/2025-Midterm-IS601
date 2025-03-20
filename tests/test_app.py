@@ -45,11 +45,10 @@ def test_app_start_unknown_command(app, capfd, monkeypatch):
 
 def test_plugin_commands_loaded(app):
     """Ensure plugins are loaded correctly and their commands are registered."""
-    expected_plugins = ["greet", "menu", "exit", "discord", "email"]  # Add actual plugins here
-    registered_commands = app.command_handler.commands.keys()
-
+    expected_plugins = ["greet", "menu", "exit", "logs", "clear_logs"]
+    registered_commands = [cmd[3:] for cmd in app.get_names() if cmd.startswith("do_")]
     for command in expected_plugins:
-        assert command in registered_commands, f"Command '{command}' is missing from registered commands"
+        assert command in registered_commands, f"Missing command: {command}"
 
 
 def test_invalid_input_handling(app, capfd, caplog):
