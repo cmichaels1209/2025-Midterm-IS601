@@ -4,6 +4,7 @@ import os
 import importlib
 import pandas as pd
 from abc import ABC, abstractmethod
+from app.plugins.state_lookup import load_state_data, get_state_info
 
 # Configure logging
 def setup_logging():
@@ -94,6 +95,25 @@ class DivideCommand(Command):
 # REPL Interface
 class CalculatorREPL(cmd.Cmd):
     prompt = "(calc) "
+
+    def __init__(self):
+            super().__init__()
+            self.state_df = load_state_data()  # ✅ Load state data at startup
+
+    def do_state(self, args):
+        """Usage: state <state_name_or_abbreviation> - Retrieve state info"""
+        if not args:
+            print("⚠️ Please provide a state name or abbreviation.")
+            return
+        get_state_info(self.state_df, args)
+
+    def default(self, line):
+        """Handle unknown commands. Check if it's a state lookup."""
+        if self.state_df is not None:
+            if line.lower() in self.state_df["State"].str.lower().values or line.lower() in self.state_df["Abbreviation"].str.lower().values:
+                get_state_info(self.state_df, line)
+                return
+        print(f"❌ Unknown command: {line}. Type 'menu' for options.")
 
     def do_add(self, args):
         "Usage: add x y - Perform addition"
