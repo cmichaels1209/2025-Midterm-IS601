@@ -1,7 +1,51 @@
-Abbreviation,State
-CA,California
-NJ,New Jersey
-TX,Texas
-FL,Florida
-IL,Illinois
-NY,New York
+State,Abbreviation,Capital,Population,Famous For
+Alabama,AL,Montgomery,5039877,Space Camp
+Alaska,AK,Juneau,733391,Northern Lights
+Arizona,AZ,Phoenix,7151502,Grand Canyon
+Arkansas,AR,Little Rock,3011524,Hot Springs National Park
+California,CA,Sacramento,39538223,Hollywood
+Colorado,CO,Denver,5773714,Rocky Mountains
+Connecticut,CT,Hartford,3605944,Yale University
+Delaware,DE,Dover,989948,First State
+Florida,FL,Tallahassee,21538187,Disney World
+Georgia,GA,Atlanta,10711908,Coca-Cola Headquarters
+Hawaii,HI,Honolulu,1455271,Beaches & Volcanoes
+Idaho,ID,Boise,1839106,Potatoes
+Illinois,IL,Springfield,12671821,Chicago Deep-Dish Pizza
+Indiana,IN,Indianapolis,6785528,Indy 500
+Iowa,IA,Des Moines,3190369,Corn Production
+Kansas,KS,Topeka,2937880,Wheat Production
+Kentucky,KY,Frankfort,4505836,Kentucky Derby
+Louisiana,LA,Baton Rouge,4657757,Mardi Gras
+Maine,ME,Augusta,1362359,Lobsters
+Maryland,MD,Annapolis,6177224,Chesapeake Bay
+Massachusetts,MA,Boston,7033469,Harvard University
+Michigan,MI,Lansing,10077331,Great Lakes
+Minnesota,MN,Saint Paul,5706494,Mall of America
+Mississippi,MS,Jackson,2961279,Blues Music
+Missouri,MO,Jefferson City,6154913,Gateway Arch
+Montana,MT,Helena,1084225,Yellowstone National Park
+Nebraska,NE,Lincoln,1961504,Cornhuskers
+Nevada,NV,Carson City,3175692,Las Vegas
+New Hampshire,NH,Concord,1377529,White Mountains
+New Jersey,NJ,Trenton,9288994,Jersey Shore
+New Mexico,NM,Santa Fe,2117522,Roswell UFO Incident
+New York,NY,Albany,20201249,Times Square
+North Carolina,NC,Raleigh,10439388,Outer Banks
+North Dakota,ND,Bismarck,779094,Oil Boom
+Ohio,OH,Columbus,11799448,Rock and Roll Hall of Fame
+Oklahoma,OK,Oklahoma City,3959353,Tornado Alley
+Oregon,OR,Salem,4237256,Crater Lake
+Pennsylvania,PA,Harrisburg,13002700,Liberty Bell
+Rhode Island,RI,Providence,1097379,Newport Mansions
+South Carolina,SC,Columbia,5118425,Myrtle Beach
+South Dakota,SD,Pierre,886667,Mount Rushmore
+Tennessee,TN,Nashville,6910840,Country Music
+Texas,TX,Austin,29145505,BBQ & Rodeos
+Utah,UT,Salt Lake City,3271616,Ski Resorts
+Vermont,VT,Montpelier,643077,Maple Syrup
+Virginia,VA,Richmond,8631393,Shenandoah National Park
+Washington,WA,Olympia,7693612,Seattle Coffee Culture
+West Virginia,WV,Charleston,1793716,Appalachian Mountains
+Wisconsin,WI,Madison,5893718,Cheese & Dairy
+Wyoming,WY,Cheyenne,576851,Yellowstone National Park
