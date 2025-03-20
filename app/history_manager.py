@@ -14,10 +14,8 @@ class HistoryManager:
 
     def save_to_history(self, operation, operand1, operand2, result):
         new_entry = pd.DataFrame([[operation, operand1, operand2, result]], columns=["operation", "operand1", "operand2", "result"])
-        if not new_entry.empty:  # Avoid concatenation if new_entry is empty
-            self.history = pd.concat([self.history, new_entry], ignore_index=True)
+        self.history = pd.concat([self.history, new_entry], ignore_index=True)
         self.history.to_csv(self._history_file, index=False)
-
 
     def load_history(self):
         if os.path.exists(self._history_file):
