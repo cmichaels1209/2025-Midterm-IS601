@@ -1,17 +1,28 @@
+import os
 import pytest
 from app import App
 
 @pytest.fixture
-def app_runner(monkeypatch):
-    """Fixture to create an App instance and simulate REPL input."""
-    def run_app_with_input(user_inputs):
-        inputs = iter(user_inputs)
-        monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+def app():
+    """Fixture to initialize and return an instance of App"""
+    return App()
 
-        app = App()
-        with pytest.raises(SystemExit) as e:
-            app.start()
+@pytest.fixture
+def simulate_repl(monkeypatch):
+    """Fixture to simulate user input in the REPL"""
+    def _simulate_repl_input(inputs):
+        inputs = iter(inputs)
+        monkeypatch.setattr("builtins.input", lambda _: next(inputs))
+    return _simulate_repl_input
 
-        return e, app  # Return both the exception and app instance
+@pytest.fixture
+def setup_log_file():
+    """Fixture to create a test log file and clean it up after"""
+    log_file = "logs/app.log"
+    with open(log_file, "a", encoding="utf-8") as f:
+        f.write("Test log entry\n")
 
-    return run_app_with_input
+    yield log_file  # Let test use it
+
+    with open(log_file, "w", encoding="utf-8") as f:
+        f.truncate(0)  # Clear log after test

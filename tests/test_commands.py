@@ -3,17 +3,15 @@ from app import App
 from app.plugins.greet import GreetCommand
 
 
-def test_app_greet_command(capfd, monkeypatch):
+def test_app_greet_command(app, simulate_repl, capsys):
     """Test that the REPL correctly handles the 'greet' command."""
-    # Simulate user entering 'greet' followed by 'exit'
-    inputs = iter(['greet', 'exit'])
-    monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+    simulate_repl(["greet", "exit"])
 
-    app = App()
-    with pytest.raises(SystemExit) as e:
-        app.start()  # Assuming App.start() is now a static method based on previous discussions
+    with pytest.raises(SystemExit):
+        app.start()
 
-    assert e.value.code == 0, "The app did not exit as expected"
+    captured = capsys.readouterr()
+    assert "Hello" in captured.out
 
 def test_app_menu_command(capfd, monkeypatch):
     """Test that the REPL correctly handles the 'greet' command."""
