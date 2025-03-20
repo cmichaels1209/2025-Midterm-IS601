@@ -30,8 +30,7 @@ class App(cmd.Cmd):
         """Usage: add x y - Perform addition"""
         try:
             x, y = map(float, args.split())
-            result = x + y
-            print(f"Result: {result}")
+            print(f"Result: {x + y}")
         except Exception:
             print("⚠️ Invalid input. Usage: add x y")
 
@@ -39,8 +38,7 @@ class App(cmd.Cmd):
         """Usage: subtract x y - Perform subtraction"""
         try:
             x, y = map(float, args.split())
-            result = x - y
-            print(f"Result: {result}")
+            print(f"Result: {x - y}")
         except Exception:
             print("⚠️ Invalid input. Usage: subtract x y")
 
@@ -48,8 +46,7 @@ class App(cmd.Cmd):
         """Usage: multiply x y - Perform multiplication"""
         try:
             x, y = map(float, args.split())
-            result = x * y
-            print(f"Result: {result}")
+            print(f"Result: {x * y}")
         except Exception:
             print("⚠️ Invalid input. Usage: multiply x y")
 
@@ -60,8 +57,7 @@ class App(cmd.Cmd):
             if y == 0:
                 print("❌ Error: Division by zero")
                 return
-            result = x / y
-            print(f"Result: {result}")
+            print(f"Result: {x / y}")
         except Exception:
             print("⚠️ Invalid input. Usage: divide x y")
 
@@ -73,13 +69,13 @@ class App(cmd.Cmd):
         if os.path.exists(csv_path):
             try:
                 df = pd.read_csv(csv_path)
-                df.columns = df.columns.str.strip()  # Remove any whitespace in column names
+                df.columns = df.columns.str.strip()  # Remove whitespace in column names
                 return df
             except Exception as e:
                 logging.error(f"Error reading CSV file: {e}")
                 return None
         else:
-            logging.warning("State CSV file not found. Attempting to use environment variables.")
+            logging.warning("State CSV file not found. Using environment variables.")
             return self.load_state_from_env()
 
     def load_state_from_env(self):
@@ -122,19 +118,12 @@ class App(cmd.Cmd):
     def default(self, line):
         """Handle unknown commands and attempt state lookup or arithmetic commands."""
         line = line.strip()
-
-        # ✅ Check if it's an arithmetic command
-        if line.split()[0] in ["add", "subtract", "multiply", "divide"]:
-            self.onecmd(line)
-            return
-
-        # ✅ Try running the `state` command if user enters a state name directly
-        if self.state_df is not None:
-            if line.title() in self.state_df["State"].values or line.upper() in self.state_df["Abbreviation"].values:
-                self.do_state(line)
-                return
-
-        print(f"❌ Unknown command: {line}. Type 'menu' for options.")
+        if hasattr(self, "do_" + line):
+            getattr(self, "do_" + line)("")
+        elif self.state_df is not None and (line.title() in self.state_df["State"].values or line.upper() in self.state_df["Abbreviation"].values):
+            self.do_state(line)
+        else:
+            print(f"❌ Unknown command: {line}. Type 'menu' for options.")
 
     def do_menu(self, args):
         """Display the available calculator and state commands."""
@@ -146,6 +135,9 @@ class App(cmd.Cmd):
             "state <state_name>": "Retrieve state information",
             "menu": "Show this command menu",
             "exit": "Exit the calculator",
+            "logs": "View log file",
+            "clear_logs": "Clear log file",
+            "greet": "Greet the user"
         }
 
         print("\nAvailable Commands:")
@@ -160,12 +152,37 @@ class App(cmd.Cmd):
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
             handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler(log_file_path, mode="a")]
         )
-        logging.info(f"Logging initialized successfully! Logs saved in {log_file_path}")
+        logging.info(f"Logging initialized. Logs saved in {log_file_path}")
+
+    def get_environment_variable(self, key: str) -> str:
+        return os.getenv(key, "DEVELOPMENT")  # Set a default value
+
 
     def load_environment_variables(self):
         settings = {key: value for key, value in os.environ.items()}
         logging.info("Environment variables loaded.")
         return settings
+
+    def do_logs(self, _):
+        """View log file contents."""
+        log_file = os.path.join(self.logs_dir, "app.log")
+        if os.path.exists(log_file):
+            with open(log_file, "r") as f:
+                content = f.read().strip()
+                if content:
+                    print("Application Log History:\n" + content)
+                else:
+                    print("Log file is empty.")
+        else:
+            print("⚠️ Log file does not exist.")
+
+
+    def do_clear_logs(self, _):
+        """Clear log file contents."""
+        log_file = os.path.join(self.logs_dir, "app.log")
+        open(log_file, "w").close()
+        print("Application log history cleared.")  # Match test expectation
+
 
     ### ✅ Exit ###
     def do_exit(self, args):
@@ -174,11 +191,21 @@ class App(cmd.Cmd):
         logging.info("Application exited.")
         sys.exit(0)
 
+    def do_greet(self, _):
+        """Greet the user"""
+        print("Hello, welcome to the Calculator App!")
+
     def start(self):
         """Start the REPL loop"""
         logging.info("Application started. Type 'exit' to exit.")
         print("Welcome to the Calculator App! Type 'menu' to see commands.")
+
+        # ✅ Print only user-defined commands
+        valid_commands = [cmd[3:] for cmd in self.get_names() if cmd.startswith("do_")]
+        print("Available Commands:", ", ".join(valid_commands))  # Show commands clearly
+
         self.cmdloop()
+
 
 if __name__ == "__main__":
     app = App()
